@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Neuronal</title>
+</head>
+<style>
+    #Sitio{
+        font-size: 5rem;
+        padding: 2rem;
+        background-color:blue;
+        color: white;
+        text-align: center;
+    }
+</style>
+<body>
+    <input data-jscolor="{value: '#ffffff'}", oninput="update(this.jscolor)">
+    <div id="Sitio">
+        Redes neuronales
+    </div>
+    <script src="../RedesNeuronales/js/brain.js"></script>
+    <script src="../RedesNeuronales/js/jscolor.min.js"></script>
+    <script type="text/javascript">
+        var Idea = new brain.NeuralNetwork();
+        Idea.train([
+            {input:{rojo:0, verde:0, azul:0}, output:{color:1}},//Fondo netro -> 1
+            {input:{rojo:1, verde:1, azul:1}, output:{color:0}}, //Fondo blanco -> 0
+            //Excepciones
+            {input:{rojo:0, verde:1, azul:0}, output:{color:0}}
+        ]);
+        function update(color){
+            //Mostrar el color en la consola
+            var rgb = [color.channels.r,color.channels.g,color.channels.b];
+            console.log(rgb);
+            //Actualizar color
+            var div = document.getElementById("Sitio");
+            div.style.background = color.toHEXString();
+            //idk
+            var entrada={
+                rojo: rgb[0]/255,//255,255,255 -> 1, 1, 1
+                verde: rgb[1]/255,// 127, 0, 255 -> 0.5, 0, 1
+                azul: rgb[2]/255
+            }
+            var resultado = Idea.run(entrada);
+            console.log(resultado);
+
+            if(resultado.color > 0.6){//Fondo blanco
+                div.style.color="white";
+            }
+            else{
+                div.style.color="black";
+            }
+        }
+    </script>
+</body>
+</html>
